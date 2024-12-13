@@ -34,3 +34,18 @@ public class SnakeGameController {
     private Direction nextDirection = Direction.RIGHT;
 
     private Timeline shrinkRectangleTimeline;
+
+    public void initialize() {
+        gc = gameCanvas.getGraphicsContext2D();
+        drawStartScreen();
+
+        gameCanvas.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                setupKeyEvents(newScene);
+            }
+        });
+
+        startSpecialFoods();
+        startShrinkingRectangle(); 
+    }
+
