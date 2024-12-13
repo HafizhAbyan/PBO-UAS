@@ -61,3 +61,14 @@ public class SnakeGameController {
         });
     }
 
+    private void handleInput(KeyCode code) {
+        if (code == KeyCode.UP && direction != Direction.DOWN) {
+            nextDirection = Direction.UP;
+        } else if (code == KeyCode.DOWN && direction != Direction.UP) {
+            nextDirection = Direction.DOWN;
+        } else if (code == KeyCode.LEFT && direction != Direction.RIGHT) {
+            nextDirection = Direction.LEFT;
+        } else if (code == KeyCode.RIGHT && direction != Direction.LEFT) {
+            nextDirection = Direction.RIGHT;
+        }
+    }
