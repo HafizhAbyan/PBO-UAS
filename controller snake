@@ -1,0 +1,123 @@
+private void growRectangle(double increment) {
+        double maxWidth = gameCanvas.getWidth();
+        double maxHeight = gameCanvas.getHeight();
+        rectWidth = Math.min(rectWidth + increment, maxWidth);
+        rectHeight = Math.min(rectHeight + increment, maxHeight);
+    }
+
+    private void draw() {
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(2);
+        gc.strokeRect((gameCanvas.getWidth() - rectWidth) / 2, 
+                      (gameCanvas.getHeight() - rectHeight) / 2, 
+                      rectWidth, rectHeight);
+
+        snake.draw(gc);
+        food.draw(gc);
+
+        if (yellowFood != null) {
+            yellowFood.draw(gc);
+        }
+
+        if (greenFood != null) {
+            greenFood.draw(gc);
+        }
+
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font(20));
+        gc.fillText("Score: " + score, 10, 20);
+    }
+
+    private void drawStartScreen() {
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font(30));
+        gc.fillText("Snake Game", 200, 180);
+        gc.setFont(new Font(20));
+        gc.fillText("Press Enter to Start", 200, 220);
+    }
+
+    private void spawnFood() {
+        Random random = new Random();
+        double left = (gameCanvas.getWidth() - rectWidth) / 2;
+        double top = (gameCanvas.getHeight() - rectHeight) / 2;
+        double right = left + rectWidth;
+        double bottom = top + rectHeight;
+
+        int x = random.nextInt((int) (right - left)) + (int) left;
+        int y = random.nextInt((int) (bottom - top)) + (int) top;
+
+        do {
+            x = random.nextInt((int) (right - left)) + (int) left;
+            y = random.nextInt((int) (bottom - top)) + (int) top;
+        } while (isFoodOnSnake(x, y));
+
+        food = new RegularFood(x / 20, y / 20); // Polymorphism: Memanggil konstruktor kelas RegularFood.
+    }
+
+    private boolean isFoodOnSnake(int x, int y) {
+        for (int[] part : snake.getBody()) {
+            if (part[0] == x && part[1] == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void startSpecialFoods() {
+        yellowFoodTimeline = new Timeline(new KeyFrame(Duration.seconds(30), e -> spawnYellowFood())); // Polymorphism: Memanggil fungsi spawnYellowFood() pada interval waktu.
+        yellowFoodTimeline.setCycleCount(Timeline.INDEFINITE);
+        yellowFoodTimeline.play();
+
+        greenFoodTimeline = new Timeline(new KeyFrame(Duration.seconds(40), e -> spawnGreenFood())); // Polymorphism: Memanggil fungsi spawnGreenFood() pada interval waktu.
+        greenFoodTimeline.setCycleCount(Timeline.INDEFINITE);
+        greenFoodTimeline.play();
+    }
+
+    private void spawnYellowFood() {
+        if (yellowFood == null) {
+            Random random = new Random();
+            double left = (gameCanvas.getWidth() - rectWidth) / 2;
+            double top = (gameCanvas.getHeight() - rectHeight) / 2;
+            double right = left + rectWidth;
+            double bottom = top + rectHeight;
+
+            int x = random.nextInt((int) (right - left)) + (int) left;
+            int y = random.nextInt((int) (bottom - top)) + (int) top;
+
+            yellowFood = new YellowFood(x / 20, y / 20); // Polymorphism: Memanggil konstruktor kelas YellowFood.
+            Timeline yellowFoodBlink = new Timeline(
+                    new KeyFrame(Duration.seconds(0.5), ev -> yellowFood.setVisible(!yellowFood.isVisible())) // Polymorphism: Menjalankan perubahan status visibilitas yellowFood.
+            );
+            yellowFoodBlink.setCycleCount(10);
+            yellowFoodBlink.play();
+
+            Timeline yellowFoodDisappear = new Timeline(new KeyFrame(Duration.seconds(5), ev -> yellowFood = null));
+            yellowFoodDisappear.setCycleCount(1);
+            yellowFoodDisappear.play();
+        }
+    }
+
+    private void spawnGreenFood() {
+        if (greenFood == null) {
+            Random random = new Random();
+            double left = (gameCanvas.getWidth() - rectWidth) / 2;
+            double top = (gameCanvas.getHeight() - rectHeight) / 2;
+            double right = left + rectWidth;
+            double bottom = top + rectHeight;
+
+            int x = random.nextInt((int) (right - left)) + (int) left;
+            int y = random.nextInt((int) (bottom - top)) + (int) top;
+
+            do {
+                x = random.nextInt((int) (right - left)) + (int) left;
+                y = random.nextInt((int) (bottom - top)) + (int) top;
+            } while (isFoodOnSnake(x, y));
+
+            greenFood = new GreenFood(x / 20, y / 20); // Polymorphism: Memanggil konstruktor kelas GreenFood.
+        }
+    }
