@@ -99,3 +99,16 @@ public class SnakeGameController {
             rectHeight -= 2;
         }
     }
+
+        private void run() {
+        if (gameOver) {
+            gc.setFill(Color.RED);
+            gc.setFont(new Font(40));
+            gc.fillText("Game Over", 200, 200);
+            timeline.stop();
+            return;
+        }
+
+        update();
+        draw();
+    }
