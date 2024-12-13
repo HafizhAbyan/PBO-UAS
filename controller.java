@@ -72,3 +72,9 @@ public class SnakeGameController {
             nextDirection = Direction.RIGHT;
         }
     }
+
+    private void initGame() {
+        snake = new Snake(15, 10); 
+        spawnFood();
+        gameOver = false;
+    }
