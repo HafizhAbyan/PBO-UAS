@@ -112,3 +112,65 @@ public class SnakeGameController {
         update();
         draw();
     }
+
+    private void update() {
+        direction = nextDirection;
+
+        int dx = 0, dy = 0;
+        switch (direction) {
+            case UP: dy = -1; break;
+            case DOWN: dy = 1; break;
+            case LEFT: dx = -1; break;
+            case RIGHT: dx = 1; break;
+        }
+
+        snake.move(dx, dy);
+
+        int[] head = snake.getBody().get(0);
+
+        double left = (gameCanvas.getWidth() - rectWidth) / 2;
+        double top = (gameCanvas.getHeight() - rectHeight) / 2;
+        double right = left + rectWidth;
+        double bottom = top + rectHeight;
+
+        try {
+            if (head[0] * 20 < left || head[0] * 20 >= right || head[1] * 20 < top || head[1] * 20 >= bottom) {
+                gameOver = true;
+                return;
+            }
+
+            for (int i = 1; i < snake.getBody().size(); i++) {
+                if (head[0] == snake.getBody().get(i)[0] && head[1] == snake.getBody().get(i)[1]) {
+                    gameOver = true;
+                }
+            }
+
+            if (head[0] == food.getX() && head[1] == food.getY()) {
+                snake.grow();
+                score++;
+                spawnFood();
+                growRectangle(10);
+            }
+
+            if (yellowFood != null && head[0] == yellowFood.getX() && head[1] == yellowFood.getY()) {
+                snake.grow();
+                score += 2;
+                yellowFood = null;
+                growRectangle(15);
+            }
+
+            if (greenFood != null) {
+                if (head[0] == greenFood.getX() && head[1] == greenFood.getY()) {
+                    snake.grow();
+                    score += 3;
+                    greenFood = null;
+                    growRectangle(20);
+                } else {
+                    greenFood.moveRandomly();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error in game update: " + e.getMessage()); // Error/Exception handling: Menangani kemungkinan error dalam permainan.
+            gameOver = true;
+        }
+    }
