@@ -78,3 +78,9 @@ public class SnakeGameController {
         spawnFood();
         gameOver = false;
     }
+
+    private void startGame() {
+        timeline = new Timeline(new KeyFrame(Duration.millis(200), e -> run())); 
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
