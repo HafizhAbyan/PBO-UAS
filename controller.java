@@ -84,3 +84,11 @@ public class SnakeGameController {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+    private void startShrinkingRectangle() {
+        shrinkRectangleTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> shrinkRectangle()) // Polymorphism: KeyFrame digunakan untuk memanggil fungsi shrinkRectangle.
+        );
+        shrinkRectangleTimeline.setCycleCount(Timeline.INDEFINITE);
+        shrinkRectangleTimeline.play();
+    }
