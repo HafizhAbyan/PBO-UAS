@@ -49,3 +49,15 @@ public class SnakeGameController {
         startShrinkingRectangle(); 
     }
 
+    private void setupKeyEvents(javafx.scene.Scene scene) {
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER && timeline == null) {
+                gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+                initGame();
+                startGame();
+            } else {
+                handleInput(e.getCode());
+            }
+        });
+    }
+
