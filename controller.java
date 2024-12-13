@@ -92,3 +92,10 @@ public class SnakeGameController {
         shrinkRectangleTimeline.setCycleCount(Timeline.INDEFINITE);
         shrinkRectangleTimeline.play();
     }
+
+    private void shrinkRectangle() {
+        if (rectWidth > 0 && rectHeight > 0) {
+            rectWidth -= 2;
+            rectHeight -= 2;
+        }
+    }
