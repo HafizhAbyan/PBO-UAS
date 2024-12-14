@@ -1,0 +1,149 @@
+// Abstract Food class
+    private static abstract class Food implements Drawable, Movable { // Abstract class: Food adalah kelas abstrak.
+        private int x, y;
+        private Color color;
+        private boolean visible = true;
+
+        public Food(int x, int y, Color color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+        }
+
+        public void setVisible(boolean visible) {
+            this.visible = visible;
+        }
+
+        public boolean isVisible() {
+            return visible;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+        
+        public Color getColor() {
+        return color;
+        }
+
+        @Override
+        public abstract void draw(GraphicsContext gc); // Polymorphism: Metode draw di-override oleh kelas turunan.
+    }
+
+    // Interface for drawable objects
+    private interface Drawable { // Interface: Drawable mendefinisikan kemampuan untuk menggambar objek.
+        void draw(GraphicsContext gc);
+    }
+
+    // Interface for movable objects
+    private interface Movable { // Interface: Movable mendefinisikan kemampuan objek untuk bergerak.
+        void moveRandomly();
+    }
+
+    // Regular food class
+    private static class RegularFood extends Food { // Inheritance: RegularFood mewarisi dari kelas Food.
+        public RegularFood(int x, int y) {
+            super(x, y, Color.RED);
+        }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            if (isVisible()) {
+                gc.setFill(getColor());
+                gc.fillRect(getX() * 20, getY() * 20, 20, 20);
+            }
+        }
+
+        @Override
+        public void moveRandomly() {
+            // Tidak perlu implementasi karena makanan reguler tidak bergerak.
+        }
+    }
+
+    // Yellow food class
+    private static class YellowFood extends Food { // Inheritance: YellowFood mewarisi dari kelas Food.
+        public YellowFood(int x, int y) {
+            super(x, y, Color.YELLOW);
+        }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            if (isVisible()) {
+                gc.setFill(getColor());
+                gc.fillRect(getX() * 20, getY() * 20, 20, 20);
+            }
+        }
+
+        @Override
+        public void moveRandomly() {
+            // Tidak perlu implementasi karena makanan kuning tidak bergerak.
+        }
+    }
+
+    // Green food class
+    private static class GreenFood extends Food implements Movable { // Inheritance dan interface: GreenFood mewarisi dari kelas Food dan mengimplementasikan interface Movable.
+        public GreenFood(int x, int y) {
+            super(x, y, Color.GREEN);
+        }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            if (isVisible()) {
+                gc.setFill(getColor());
+                gc.fillRect(getX() * 20, getY() * 20, 20, 20);
+            }
+        }
+
+        @Override
+        public void moveRandomly() {
+            Random random = new Random();
+            setX(random.nextInt(30));
+            setY(random.nextInt(20));
+        }
+    }
+
+    // Snake class
+    private static class Snake implements Drawable { // Inheritance: Snake adalah kelas yang mengimplementasikan interface Drawable.
+        private List<int[]> body;
+
+        public Snake(int x, int y) {
+            body = new ArrayList<>();
+            body.add(new int[]{x, y});
+        }
+
+        public List<int[]> getBody() {
+            return body;
+        }
+
+        public void move(int dx, int dy) {
+            int[] head = body.get(0);
+            body.add(0, new int[]{head[0] + dx, head[1] + dy});
+            body.remove(body.size() - 1);
+        }
+
+        public void grow() {
+            int[] tail = body.get(body.size() - 1);
+            body.add(new int[]{tail[0], tail[1]});
+        }
+
+        @Override
+        public void draw(GraphicsContext gc) {
+            gc.setFill(Color.GREEN);
+            for (int[] part : body) {
+                gc.fillRect(part[0] * 20, part[1] * 20, 20, 20);
+            }
+        }
+    }
+}
